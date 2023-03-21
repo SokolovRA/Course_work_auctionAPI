@@ -1,4 +1,4 @@
-package com.example.auctionapi.mapping;
+package com.example.auctionapi.service;
 
 
 import com.example.auctionapi.dto.BidDTO;

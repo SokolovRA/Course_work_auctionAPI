@@ -10,7 +10,6 @@ import com.example.auctionapi.repository.BidRepository;
 import com.example.auctionapi.repository.LotRepository;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-import com.example.auctionapi.mapping.MappingUtils;
 import com.example.auctionapi.dto.FullLotDTO;
 
 import java.util.Collection;
@@ -53,8 +52,8 @@ public class LotService {
         return bidRepository.getInfoAboutFirstBidder(id);
     }
 
-    public BidderNameAndBidDate getInfoAboutLudoman(Long id) {
-        return bidRepository.getInfoAboutLudoman(id);
+    public BidderNameAndBidDate getInfoAbout(Long id) {
+        return bidRepository.getInfoAbout(id);
     }
 
     public FullLotDTO getInfoAboutLot(Long id) {
@@ -72,25 +71,6 @@ public class LotService {
                 .collect(Collectors.toList());
     }
 
-    public Collection<FullLotDTO> getAllLotsForExport() {
-        return lotRepository.findAll().stream()
-                .map(MappingUtils::fromLotToFullLotDTO)
-                .peek(lot -> lot.setCurrentPrice(sumCurrentPrice(lot.getId(), lot.getBidPrice(), lot.getStartPrice())))
-                .peek(lot -> lot.setLastBid(findInfoABoutLastBid(lot.getId())))
-                .collect(Collectors.toList());
-    }
-
-    public boolean checkToException (CreateLotDTO createLotDTO) {
-        if(createLotDTO.getTitle() == null || createLotDTO.getTitle().isEmpty()) {
-            return false;
-        } else if (createLotDTO.getDescription() == null || createLotDTO.getDescription().isEmpty()) {
-            return false;
-        } else if (createLotDTO.getStartPrice() == null || createLotDTO.getBidPrice() == null) {
-            return false;
-        } else {
-            return true;
-        }
-    }
     private Integer sumCurrentPrice(Long id, Integer bidPrice, Integer startPrice) {
         return (int) (bidRepository.numberOfBets(id) * bidPrice + startPrice);
     }
@@ -104,5 +84,23 @@ public class LotService {
         } else {
             return null;
         }
+    }
+    public boolean checkToException (CreateLotDTO createLotDTO) {
+        if(createLotDTO.getTitle() == null || createLotDTO.getTitle().isEmpty()) {
+            return false;
+        } else if (createLotDTO.getDescription() == null || createLotDTO.getDescription().isEmpty()) {
+            return false;
+        } else if (createLotDTO.getStartPrice() == null || createLotDTO.getBidPrice() == null) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+        public Collection<FullLotDTO> getAllLotsForExportCSV() {
+            return lotRepository.findAll().stream()
+                .map(MappingUtils::fromLotToFullLotDTO)
+                .peek(lot -> lot.setCurrentPrice(sumCurrentPrice(lot.getId(), lot.getBidPrice(), lot.getStartPrice())))
+                .peek(lot -> lot.setLastBid(findInfoABoutLastBid(lot.getId())))
+                .collect(Collectors.toList());
     }
 }

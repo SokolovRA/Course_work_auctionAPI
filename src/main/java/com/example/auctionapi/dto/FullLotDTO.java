@@ -1,8 +1,8 @@
 package com.example.auctionapi.dto;
 
 import com.example.auctionapi.enums.LotStatus;
-import com.example.auctionapi.model.Lot;
-import liquibase.pro.packaged.I;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 @Data
