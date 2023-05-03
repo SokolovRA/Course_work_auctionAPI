@@ -1,3 +1,3 @@
-# Project_auction_system
+# Учебная работа
 
 REST API для простой аукционной системы
